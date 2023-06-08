@@ -10,7 +10,7 @@ class StorageCSV(IStorage):
         self.movies = {}
         for movie in self.file:
             if len(movie) >= 6:
-                movie_data = {'release_year': movie[1], 'rating': movie[2], 'poster': movie[3], 'movie_link': movie[4],
+                movie_data = {'release_year': movie[2], 'rating': movie[1], 'poster': movie[3], 'movie_link': movie[4],
                               'notes': movie[5]}
                 self.movies[movie[0]] = movie_data
 
@@ -26,9 +26,9 @@ class StorageCSV(IStorage):
             data.append(movie_row)
         return data
 
-    def add_movie(self, title, year, rating, poster, movie_link):
+    def add_movie(self, title, rating, year,  poster, movie_link):
         if rating is not None:
-            self.movies[title] = {'rating': rating, 'release_year': int(year), 'poster': poster,
+            self.movies[title] = {'rating': float(rating), 'release_year': int(year), 'poster': poster,
                                   'movie_link': movie_link, 'notes': None}
         else:
             self.movies[title] = {'rating': None, 'release_year': int(year), 'poster': poster,
