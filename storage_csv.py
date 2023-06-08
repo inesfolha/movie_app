@@ -2,16 +2,15 @@ from colorama import Fore
 
 import file_handler
 from istorage import IStorage
-import csv
 
 
 class StorageCSV(IStorage):
     def __init__(self, file_path):
         self.file = file_handler.load_csv(file_path)
         self.movies = {}
-        for movie in self.file[1:]:
+        for movie in self.file:
             if len(movie) >= 6:
-                movie_data = {'release_year': movie[2], 'rating': movie[1], 'poster': movie[3], 'movie_link': movie[4],
+                movie_data = {'release_year': movie[1], 'rating': movie[2], 'poster': movie[3], 'movie_link': movie[4],
                               'notes': movie[5]}
                 self.movies[movie[0]] = movie_data
 
@@ -21,7 +20,7 @@ class StorageCSV(IStorage):
     def return_to_csv(self):
         data = []
         for movie in self.movies:
-            movie_row = [movie, self.movies[movie]['release_year'], self.movies[movie]['rating'],
+            movie_row = [movie, self.movies[movie]['rating'], self.movies[movie]['release_year'],
                          self.movies[movie]['poster'],
                          self.movies[movie]['movie_link'], self.movies[movie]['notes']]
             data.append(movie_row)
@@ -29,7 +28,7 @@ class StorageCSV(IStorage):
 
     def add_movie(self, title, year, rating, poster, movie_link):
         if rating is not None:
-            self.movies[title] = {'rating': float(rating), 'release_year': int(year), 'poster': poster,
+            self.movies[title] = {'rating': rating, 'release_year': int(year), 'poster': poster,
                                   'movie_link': movie_link, 'notes': None}
         else:
             self.movies[title] = {'rating': None, 'release_year': int(year), 'poster': poster,

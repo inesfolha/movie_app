@@ -3,6 +3,7 @@ from get_api_data import *
 import storage_csv
 import storage_json
 
+
 class MovieApp:
     def __init__(self, storage):
         self._storage = storage
@@ -13,7 +14,7 @@ class MovieApp:
         and prints how many movies there are in total in the database. """
 
         print(f'{len(movies)} movies in total:')
-        [print(f"{movie}: Rating: {movies[movie]['rating']}, Year: {movies[movie]['release_year']}") for movie in
+        [print(f"{movie}: Rating: {movies[movie]['rating']} Year: {movies[movie]['release_year']}") for movie in
          movies.keys()]
 
     def _command_add_movie(self):
@@ -21,23 +22,29 @@ class MovieApp:
         if the movie is found, it then extracts the movie information
         and calls the add_movie method to store the information in a file"""
 
-        movie = input(Fore.YELLOW + 'Please enter a new movie: ' + Fore.RESET)     #title, year, rating, poster, movie_link
+        movie = input(
+            Fore.YELLOW + 'Please enter a new movie: ' + Fore.RESET)
         try:
             movie_info = data_extractor(movie)
             movie_link = get_imdb_link(movie)
             if movie_info is not None:
                 title = movie_info["Title"]
                 if len(movie_info['Ratings']) > 0:
-                    rating = movie_info['Ratings'][0]['Value'].split("/")
+                    rating_value = movie_info['Ratings'][0]['Value'].split("/")[0]
+                    rating = float(rating_value)
+                    print(rating)
+                    print(rating_value)
                 else:
                     rating = None
-                year = movie_info['Year']
+                year = int(movie_info['Year'])
                 poster = movie_info['Poster']
+
                 self._storage.add_movie(title, year, rating, poster, movie_link)
                 print(Fore.GREEN + f'Movie "{title}" successfully added to the collection!' + Fore.RESET)
             else:
                 raise ValueError(
-                    f'Sorry, the movie "{movie}" could not be found. Please check your spelling and try again.')
+                f'Sorry, the movie "{movie}" could not be found. Please check your spelling and try again.')
+
         except (KeyError, ValueError) as e:
             print(Fore.RED + 'Please try again with a different movie.' + Fore.RESET)
         except Exception as e:
@@ -45,8 +52,6 @@ class MovieApp:
                 Fore.RED + 'An unexpected error occurred while adding the movie. Please try again later.' + Fore.RESET)
             print(Fore.RED + f'Error message: {str(e)}' + Fore.RESET)
 
-        finally:
-            return self._storage
 
     def _command_delete_movie(self):
         """Asks the user for the name of the movie to delete
