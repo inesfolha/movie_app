@@ -7,50 +7,61 @@ from fuzzywuzzy import fuzz
 init()
 
 
-def avg_rating(movies):
-    """calculates the average rating"""
-    rated_movies = [movie for movie in movies if movies[movie]['rating'] is not None]
+def ratings_list(movies):
+    rated_movies = [movie for movie in movies if float(movies[movie]['rating']) is not None]
+
     if len(rated_movies) == 0:
         print("There are no rated movies in the database.")
-        return
-    average = sum(movies[movie]['rating'] for movie in rated_movies) / len(rated_movies)
+    ratings = []
+    for movie in rated_movies:
+        rating = float(movies[movie]['rating'])
+        ratings.append(rating)
+    return ratings, rated_movies
+
+
+def avg_rating(movies):
+    """calculates the average rating"""
+    ratings = ratings_list(movies)[0]
+    rated_movies = ratings_list(movies)[1]
+    average = sum(movie for movie in ratings) / len(rated_movies)
     print(f"Average rating: {average:.1f}")
 
 
 def median_rating(movies):
     """calculates the median rating"""
-    sorted_ratings = sorted([movie for movie in movies.values() if movie['rating'] is not None],
-                            key=lambda x: x['rating'])
+    ratings = ratings_list(movies)[0]
+    sorted_ratings = sorted(ratings)
+
     mid = len(sorted_ratings) // 2
     if len(sorted_ratings) % 2 == 0:
-        median = (sorted_ratings[mid - 1]['rating'] + sorted_ratings[mid]['rating']) / 2
+        median = (sorted_ratings[mid - 1] + sorted_ratings[mid]) / 2
     else:
-        median = sorted_ratings[mid]['rating']
+        median = sorted_ratings[mid]
     print(f"Median rating: {median:.1f}")
 
 
 def get_best_and_worst(movies):
     """finds the best and worst rated movies"""
-    best_movies = []
-    worst_movies = []
+
     rated_movies = [(movie, data['rating']) for movie, data in movies.items() if data['rating'] is not None]
 
     max_rating = max(rated_movies, key=lambda x: x[1])[1]
     min_rating = min(rated_movies, key=lambda x: x[1])[1]
 
+    best_movies = []
+    worst_movies = []
     for movie, data in movies.items():
         if data['rating'] == max_rating:
             best_movies.append((movie, data['rating']))
         elif data['rating'] == min_rating:
             worst_movies.append((movie, data['rating']))
 
-    # Print best and worst movies
     print('Best Movies:')
     for movie, rating in best_movies:
-        print(f"{movie}, {rating:.1f}")
+        print(f"{movie}, {rating}")
     print('Worst Movies:')
     for movie, rating in worst_movies:
-        print(f"{movie}, {rating:.1f}")
+        print(f"{movie}, {rating}")
 
 
 def movie_stats(movies):

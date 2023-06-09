@@ -74,44 +74,42 @@ class MovieApp:
                 Fore.RED + 'An unexpected error occurred while updating the movie. Please try again later.' + Fore.RESET)
             print(Fore.RED + f'Error message: {str(e)}' + Fore.RESET)
 
-    def _command_movie_stats(self):
-
+    def _command_movie_stats(self):               # is working
         movies = self._storage.list_movies()
         movie_stats(movies)
 
-    def _command_random_movie(self):
-        pass
+    def _command_ratings_histogram(self):     # to check
+        movies = self._storage.list_movies()
+        ratings_histogram(movies)
 
-    def _command_search_movie(self):
-        pass
+    def _command_random_movie(self):          # to check
+        movies = self._storage.list_movies()
+        random_movie(movies)
 
-    def _command_sorted_movies(self):
-        pass
+    def _command_search_movie(self):              # to check
+        movies = self._storage.list_movies()
+        movie_search(movies)
 
-    def _generate_website(self):
+    def _command_sorted_movies(self):              # to check
+        movies = self._storage.list_movies()
+        top_movies(movies)
+
+    def _generate_website(self):           # to build
         pass
 
     # from website_generator
     # serialize_info()
     # html_generator():
 
-    def run(self):
+    def run(self):                          # to build
         pass
 
         # Print menu - display_menu()
         # Get use command - handle_choice(choice, movies)
         # Execute command
 
-# Missing:
 
-# from movies_display_data:
-# random_movie(movies)
-# movie_search(movies)
-# top_movies(movies)
-# ratings_histogram(movies)
 
-# from get_api_data:
-# data_extractor(movie)
-# get_imdb_link(title)
+
 
 # main
