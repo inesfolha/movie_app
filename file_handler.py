@@ -22,16 +22,6 @@ def load_csv(file_path):
     return data
 
 
-def return_to_csv(info_dict):
-    data = []
-    for movie in info_dict:
-        movie_row = [movie, info_dict[movie]['release_year'], info_dict[movie]['rating'],
-                     info_dict[movie]['poster'],
-                     info_dict[movie]['movie_link'], info_dict[movie]['notes']]
-        data.append(movie_row)
-    return data
-
-
 def save_csv(filename, data_to_save):
     """loads a csv into a dict"""
     with open(filename, 'w') as csv_file:

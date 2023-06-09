@@ -30,20 +30,17 @@ class MovieApp:
             if movie_info is not None:
                 title = movie_info["Title"]
                 if len(movie_info['Ratings']) > 0:
-                    rating_value = movie_info['Ratings'][0]['Value'].split("/")[0]
-                    rating = float(rating_value)
-                    print(rating)
-                    print(rating_value)
+                    rating = float(movie_info['Ratings'][0]['Value'].split("/")[0])
                 else:
                     rating = None
                 year = int(movie_info['Year'])
                 poster = movie_info['Poster']
 
-                self._storage.add_movie(title, year, rating, poster, movie_link)
+                self._storage.add_movie(title, rating, year, poster, movie_link)
                 print(Fore.GREEN + f'Movie "{title}" successfully added to the collection!' + Fore.RESET)
             else:
                 raise ValueError(
-                f'Sorry, the movie "{movie}" could not be found. Please check your spelling and try again.')
+                    f'Sorry, the movie "{movie}" could not be found. Please check your spelling and try again.')
 
         except (KeyError, ValueError) as e:
             print(Fore.RED + 'Please try again with a different movie.' + Fore.RESET)
@@ -52,18 +49,33 @@ class MovieApp:
                 Fore.RED + 'An unexpected error occurred while adding the movie. Please try again later.' + Fore.RESET)
             print(Fore.RED + f'Error message: {str(e)}' + Fore.RESET)
 
-
     def _command_delete_movie(self):
         """Asks the user for the name of the movie to delete
         It then cals the delete_movie method """
-        pass
+
+        try:
+            title = input(Fore.YELLOW + 'Enter movie name to delete: ' + Fore.RESET)
+            self._storage.delete_movie(title)
+
+        except Exception as e:
+            print(
+                Fore.RED + 'An unexpected error occurred while deleting the movie. Please try again later.' + Fore.RESET)
+            print(Fore.RED + f'Error message: {str(e)}' + Fore.RESET)
 
     def _command_update_movie(self):
         """Asks the user for the name of the movie to update
             It then cals the update_movie method """
-        pass
+        try:
+            title = input(Fore.YELLOW + "Enter the movie name: " + Fore.RESET)
+            notes = (input(Fore.YELLOW + "Enter movie notes: " + Fore.RESET))
+            self._storage.update_movie(title, notes)
+        except Exception as e:
+            print(
+                Fore.RED + 'An unexpected error occurred while updating the movie. Please try again later.' + Fore.RESET)
+            print(Fore.RED + f'Error message: {str(e)}' + Fore.RESET)
 
     def _command_movie_stats(self):
+
         movies = self._storage.list_movies()
         movie_stats(movies)
 
