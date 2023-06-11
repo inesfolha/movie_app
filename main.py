@@ -6,9 +6,18 @@ from menu import *
 
 
 def main():
-    """ This function stores the data from the movies and executes the menu """
+    """
+       Executes the main functionality of the movie app.
+
+       - Initializes the storage object (either StorageCSV or StorageJson).
+       - Creates an instance of the MovieApp class using the storage object.
+       - Displays the menu and prompts the user for a choice.
+       - Executes the corresponding command based on the user's choice using the movie_app object.
+       - Prompts the user to press enter to continue after executing a command.
+       """
+
     # storage = StorageCSV('movies.csv')
-    storage = StorageCSV('movies_2.json')
+    storage = StorageJson('movies_2.json')
     movie_app = MovieApp(storage)
     while True:
         choice = display_menu()

@@ -12,16 +12,15 @@ class StorageJson(IStorage):
     def list_movies(self):
         return self.movies
 
-    def add_movie(self, title, year, rating, poster, movie_link):
+    def add_movie(self, title, rating, year, poster, movie_link):
         if rating is not None:
-            self.movies[title] = {'rating': float(rating), 'release_year': int(year), 'poster_url': poster,
+            self.movies[title] = {'rating': float(rating), 'release_year': int(year), 'poster': poster,
                                   'movie_link': movie_link}
         else:
             self.movies[title] = {'rating': None, 'release_year': int(year), 'poster_url': poster,
                                   'movie_link': movie_link}
-            print(Fore.GREEN + f'Movie "{title}" successfully added to the collection!' + Fore.RESET)
 
-            file_handler.save_file(self.file_path, self.movies)
+        file_handler.save_file(self.file_path, self.movies)
 
     def delete_movie(self, title):
         movie_to_delete = None
