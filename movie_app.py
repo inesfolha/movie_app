@@ -1,7 +1,7 @@
 from movies_display_data import *
 from get_api_data import *
-import storage_csv
-import storage_json
+from website_generator import *
+from menu import *
 
 
 class MovieApp:
@@ -78,38 +78,51 @@ class MovieApp:
         movies = self._storage.list_movies()
         movie_stats(movies)
 
-    def _command_ratings_histogram(self):     # to check
+    def _command_ratings_histogram(self):     # to is working
         movies = self._storage.list_movies()
         ratings_histogram(movies)
 
-    def _command_random_movie(self):          # to check
+    def _command_random_movie(self):          # is working
         movies = self._storage.list_movies()
         random_movie(movies)
 
-    def _command_search_movie(self):              # to check
+    def _command_search_movie(self):              # is working
         movies = self._storage.list_movies()
         movie_search(movies)
 
-    def _command_sorted_movies(self):              # to check
+    def _command_sorted_movies(self):              # is working
         movies = self._storage.list_movies()
         top_movies(movies)
 
-    def _generate_website(self):           # to build
-        pass
+    def _command_generate_website(self):               # is working
+        movies_dict = self._storage.list_movies()
+        serialize_info(movies_dict)
+        html_generator(movies_dict)
 
-    # from website_generator
-    # serialize_info()
-    # html_generator():
+    def run(self, choice):
+        if choice == 1:
+            self._command_list_movies()
+        elif choice == 2:
+            self._command_add_movie()
+        elif choice == 3:
+            self._command_delete_movie()
+        elif choice == 4:
+            self._command_update_movie()
+        elif choice == 5:
+            self._command_movie_stats()
+        elif choice == 6:
+            self._command_random_movie()
+        elif choice == 7:
+            self._command_search_movie()
+        elif choice == 8:
+            self._command_sorted_movies()
+        elif choice == 9:
+            self._command_ratings_histogram()
+        elif choice == 10:
+            self._command_generate_website()
+        elif choice == 0:
+            print(Fore.GREEN + "Bye!" + Fore.RESET)
+            quit()
+        else:
+            print(f'Error: Choice {choice} not supported! Try again.')
 
-    def run(self):                          # to build
-        pass
-
-        # Print menu - display_menu()
-        # Get use command - handle_choice(choice, movies)
-        # Execute command
-
-
-
-
-
-# main
