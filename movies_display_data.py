@@ -8,10 +8,11 @@ init()
 
 
 def ratings_list(movies):
-    rated_movies = [movie for movie in movies if float(movies[movie]['rating']) is not None]
+    rated_movies = [movie for movie in movies if movies[movie]['rating'] is not None and movies[movie]['rating'] != '']
 
     if len(rated_movies) == 0:
         print("There are no rated movies in the database.")
+
     ratings = []
     for movie in rated_movies:
         rating = float(movies[movie]['rating'])
@@ -43,18 +44,19 @@ def median_rating(movies):
 def get_best_and_worst(movies):
     """finds the best and worst rated movies"""
 
-    rated_movies = [(movie, data['rating']) for movie, data in movies.items() if data['rating'] is not None]
+    rated_movies = [(movie, float(data['rating'])) for movie, data in movies.items()
+                    if data['rating'] is not None and data['rating'] != '']
 
     max_rating = max(rated_movies, key=lambda x: x[1])[1]
     min_rating = min(rated_movies, key=lambda x: x[1])[1]
 
     best_movies = []
     worst_movies = []
-    for movie, data in movies.items():
-        if data['rating'] == max_rating:
-            best_movies.append((movie, data['rating']))
-        elif data['rating'] == min_rating:
-            worst_movies.append((movie, data['rating']))
+    for movie, rating in rated_movies:
+        if rating == max_rating:
+            best_movies.append((movie, rating))
+        elif rating == min_rating:
+            worst_movies.append((movie, rating))
 
     print('Best Movies:')
     for movie, rating in best_movies:
@@ -88,7 +90,7 @@ def movie_search(movies):
     search = input(Fore.YELLOW + "Enter part of a movie name: " + Fore.RESET)
     matching_movies = []
     for movie, rating in movies.items():
-        # Using the fuzz.token_set_ratio function to compare the user's search string with each movie name in the database.
+        # Using the fuzz.token_set_ratio function to compare the user's search string with each movie name
         ratio = fuzz.token_set_ratio(search.lower(), movie.lower())
         # Define a threshold is 70% similarity to consider a match.
         if ratio >= 70:
@@ -101,12 +103,18 @@ def movie_search(movies):
 
 
 def top_movies(movies):
-    """ This function prints all the movies and their ratings, in descending order by the rating."""
+    """This function prints all the movies and their ratings, in descending order by the rating.
+    All None ratings are displayed in the end """
     sorted_movies = sorted(movies.items(),
-                           key=lambda x: x[1]['rating'] if x[1]['rating'] is not None else float('-inf'), reverse=True)
+                           key=lambda x: float(x[1]['rating']) if x[1]['rating'] and x[1]['rating'] != ''
+                           else float('-inf'), reverse=True)
     print('Movies sorted by rating:')
-    [print(f" - {movie}: {movie_data['rating']}" if movie_data['rating'] is not None else f" - {movie}: N/A") for
-     movie, movie_data in sorted_movies]
+    for movie, movie_data in sorted_movies:
+        rating = movie_data['rating']
+        if rating is not None and rating != '':
+            print(f" - {movie}: {rating}")
+        else:
+            print(f" - {movie}: N/A")
 
 
 def ratings_histogram(movies):

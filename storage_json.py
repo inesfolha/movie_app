@@ -13,7 +13,7 @@ class StorageJson(IStorage):
         return self.movies
 
     def add_movie(self, title, rating, year, poster, movie_link):
-        if rating is not None:
+        if rating is not None and rating != '':
             self.movies[title] = {'rating': float(rating), 'release_year': int(year), 'poster': poster,
                                   'movie_link': movie_link}
         else:

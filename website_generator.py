@@ -11,11 +11,11 @@ def serialize_info(movies_dict):
     str_output = ""
     # serialize the info from the movies
     for movie in movies_dict.keys():
-        rating = movies_dict[movie]['rating']
-        year = movies_dict[movie]['release_year']
-        poster = movies_dict[movie]['poster']
+        rating = movies_dict[movie].get('rating')
+        year = movies_dict[movie].get('release_year')
+        poster = movies_dict[movie].get('poster')
         notes = movies_dict[movie].get('notes')
-        link = movies_dict[movie]['movie_link']
+        link = movies_dict[movie].get('movie_link')
 
         # format a html string with that info
         str_output += f"""

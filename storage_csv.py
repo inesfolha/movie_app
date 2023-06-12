@@ -26,14 +26,13 @@ class StorageCSV(IStorage):
             data.append(movie_row)
         return data
 
-    def add_movie(self, title, rating, year,  poster, movie_link):
-        if rating is not None:
+    def add_movie(self, title, rating, year, poster, movie_link):
+        if rating is not None and rating != '':
             self.movies[title] = {'rating': float(rating), 'release_year': int(year), 'poster': poster,
                                   'movie_link': movie_link, 'notes': None}
         else:
             self.movies[title] = {'rating': None, 'release_year': int(year), 'poster': poster,
                                   'movie_link': movie_link, 'notes': None}
-            print(Fore.GREEN + f'Movie "{title}" successfully added to the collection!' + Fore.RESET)
 
         data = self.return_to_csv()
         file_handler.save_csv('movies.csv', data)
